@@ -1,0 +1,9 @@
+{
+    "name": "video-chat",
+    "version": "1.0.0",
+    "description": "Video chat using WebRTC and Websockets",
+    "license": "MIT",
+    "devDependencies": {
+        "nodemon": "^2.0.15"
+    }
+}
