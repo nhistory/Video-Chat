@@ -1,5 +1,3 @@
-# Video Chat app
-
 # Background
 
 ## Backend
