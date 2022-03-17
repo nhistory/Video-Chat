@@ -2,7 +2,7 @@ import http from 'http';
 import { WebSocketServer } from 'ws';
 import express from 'express';
 import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { dirname, parse } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -28,18 +28,22 @@ const sockets = [];
 wss.on('connection', (socket) => {
     // push socket info into sockets array
     sockets.push(socket);
-
+    socket['nickname'] = 'Anon';
     console.log('Connected to Browser ');
 
     socket.on('close', () => {
         console.log('Disconnected from the Browser');
     });
-    socket.on('message', (message) => {
-        // send message to all sockets in array
-        sockets.forEach((aSocket) => {
-            aSocket.send(message.toString());
-        });
-        // socket.send(message.toString());
+    socket.on('message', (msg) => {
+        const message = JSON.parse(msg.toString());
+        switch (message.type) {
+            case 'new_message':
+                sockets.forEach((aSocket) => {
+                    aSocket.send(`${socket.nickname}: ${message.payload}`);
+                });
+            case 'nickname':
+                socket['nickname'] = message.payload;
+        }
     });
 });
 
