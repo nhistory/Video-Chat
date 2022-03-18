@@ -1,5 +1,5 @@
 import http from 'http';
-import { WebSocketServer } from 'ws';
+import { Server } from 'socket.io';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import { dirname, parse } from 'path';
@@ -14,23 +14,32 @@ app.use('/public', express.static(__dirname + '/public'));
 app.get('/', (_, res) => res.render('home'));
 app.get('/*', (_, res) => res.redirect('/'));
 
-const handleListen = () => console.log(`Listening on http://localhost:3000`);
 // app.listen(3000, handleListen);
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
+const wsServer = new Server(httpServer);
 
+wsServer.on('connection', (socket) => {
+    socket.on('enter_room', (msg, done) => {
+        console.log(msg);
+        setTimeout(() => {
+            done();
+        }, 10000);
+    });
+});
+
+/* 
 // ws server with http
 const wss = new WebSocketServer({ server });
 
 // fake database
 const sockets = [];
-
 // make ws event
 wss.on('connection', (socket) => {
     // push socket info into sockets array
     sockets.push(socket);
     socket['nickname'] = 'Anon';
     console.log('Connected to Browser ');
-
+    
     socket.on('close', () => {
         console.log('Disconnected from the Browser');
     });
@@ -41,10 +50,12 @@ wss.on('connection', (socket) => {
                 sockets.forEach((aSocket) => {
                     aSocket.send(`${socket.nickname}: ${message.payload}`);
                 });
-            case 'nickname':
-                socket['nickname'] = message.payload;
-        }
-    });
-});
+                case 'nickname':
+                    socket['nickname'] = message.payload;
+                }
+            });
+        }); 
+        */
 
-server.listen(3000, handleListen);
+const handleListen = () => console.log(`Listening on http://localhost:3000`);
+httpServer.listen(3000, handleListen);

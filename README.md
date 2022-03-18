@@ -29,3 +29,26 @@
         -   WebSocket is an HTTP upgrade. Uses the same TCP connection over ws:// or wss://
         -   Easy to implement and standardize.
         -   Only sends headers once.
+
+## How to run
+
+-   npm install
+-   npm run dev
+
+### dependencie version
+
+```json
+"devDependencies": {
+        "@babel/cli": "^7.17.6",
+        "@babel/core": "^7.17.5",
+        "@babel/node": "^7.16.8",
+        "@babel/preset-env": "^7.16.11",
+        "nodemon": "^2.0.15"
+    },
+    "dependencies": {
+        "express": "^4.17.3",
+        "pug": "^3.0.2",
+        "socket.io": "^4.4.1",
+        "ws": "^8.5.0"
+    }
+```
